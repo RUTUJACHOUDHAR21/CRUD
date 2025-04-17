@@ -11,7 +11,9 @@ const StudentList = () => {
     setStudents(data);
   };
 
-  useEffect(() => { fetchStudents(); }, []);
+  useEffect(() => {
+    fetchStudents();
+  }, []);
 
   const addStudent = async (student) => {
     await fetch('https://crud-iwds.onrender.com/api/students', {
@@ -33,9 +35,13 @@ const StudentList = () => {
     <div>
       <h2>Student Registration</h2>
       <StudentForm onAdd={addStudent} />
-      {students.map((s) => (
-        <StudentItem key={s.id} student={s} onDelete={deleteStudent} />
-      ))}
+      {students.length > 0 ? (
+        students.map((student) => (
+          <StudentItem key={student.id} student={student} onDelete={deleteStudent} />
+        ))
+      ) : (
+        <p>No students registered yet.</p>
+      )}
     </div>
   );
 };
