@@ -1,39 +1,33 @@
 const express = require('express');
+const { getAllStudents, addStudent, deleteStudent } = require('./studentModel');
 const router = express.Router();
-const pool = require('./db');
 
-// GET all students
 router.get('/', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM students ORDER BY id ASC');
-    res.json(result.rows);
+    const students = await getAllStudents();
+    res.json(students);
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Failed to fetch students' });
   }
 });
 
-// POST a new student
 router.post('/', async (req, res) => {
   const { name, email } = req.body;
   try {
-    await pool.query('INSERT INTO students (name, email) VALUES ($1, $2)', [name, email]);
-    res.status(201).send('Student added');
+    await addStudent(name, email);
+    res.status(201).json({ message: 'Student added' });
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Failed to add student' });
   }
 });
 
-// DELETE a student
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    await pool.query('DELETE FROM students WHERE id = $1', [id]);
-    res.status(204).send();
+    await deleteStudent(id);
+    res.status(200).json({ message: 'Student deleted' });
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Failed to delete student' });
   }
 });
 
