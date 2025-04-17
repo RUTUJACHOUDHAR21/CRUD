@@ -4,11 +4,18 @@ import StudentForm from './StudentForm';
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true); // optional
 
   const fetchStudents = async () => {
-    const res = await fetch('https://crud-iwds.onrender.com/api/students');
-    const data = await res.json();
-    setStudents(data);
+    try {
+      const res = await fetch('https://crud-iwds.onrender.com/api/students');
+      const data = await res.json();
+      setStudents(data);
+    } catch (err) {
+      console.error("Error fetching students:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -16,26 +23,36 @@ const StudentList = () => {
   }, []);
 
   const addStudent = async (student) => {
-    await fetch('https://crud-iwds.onrender.com/api/students', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(student)
-    });
-    fetchStudents();
+    try {
+      await fetch('https://crud-iwds.onrender.com/api/students', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(student)
+      });
+      fetchStudents();
+    } catch (err) {
+      console.error("Error adding student:", err);
+    }
   };
 
   const deleteStudent = async (id) => {
-    await fetch(`https://crud-iwds.onrender.com/api/students/${id}`, {
-      method: 'DELETE'
-    });
-    fetchStudents();
+    try {
+      await fetch(`https://crud-iwds.onrender.com/api/students/${id}`, {
+        method: 'DELETE'
+      });
+      fetchStudents();
+    } catch (err) {
+      console.error("Error deleting student:", err);
+    }
   };
 
   return (
-    <div>
+    <div style={{ padding: '20px', fontFamily: 'Arial' }}>
       <h2>Student Registration</h2>
       <StudentForm onAdd={addStudent} />
-      {students.length > 0 ? (
+      {loading ? (
+        <p>Loading students...</p>
+      ) : students.length > 0 ? (
         students.map((student) => (
           <StudentItem key={student.id} student={student} onDelete={deleteStudent} />
         ))
