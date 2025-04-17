@@ -11,20 +11,22 @@ const StudentList = () => {
     setStudents(data);
   };
 
-  useEffect(() => { fetchStudents(); }, []);
+  useEffect(() => {
+    fetchStudents();
+  }, []);
 
   const addStudent = async (student) => {
     await fetch('https://crud-iwds.onrender.com/api/students', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(student)
+      body: JSON.stringify(student),
     });
     fetchStudents();
   };
 
   const deleteStudent = async (id) => {
-    await fetch(`https://crud-iwds.onrender.com/students/${id}`, {
-      method: 'DELETE'
+    await fetch(`https://crud-iwds.onrender.com/api/students/${id}`, {
+      method: 'DELETE',
     });
     fetchStudents();
   };
