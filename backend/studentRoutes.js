@@ -1,29 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const studentModel = require('./studentModel');
+const pool = require('./db');
 
+// GET all students
 router.get('/', async (req, res) => {
-  const { rows } = await studentModel.getAllStudents();
-  res.json(rows);
+  try {
+    const result = await pool.query('SELECT * FROM students ORDER BY id ASC');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
 });
 
+// POST a new student
 router.post('/', async (req, res) => {
   const { name, email } = req.body;
-  await studentModel.createStudent(name, email);
-  res.sendStatus(201);
+  try {
+    await pool.query('INSERT INTO students (name, email) VALUES ($1, $2)', [name, email]);
+    res.status(201).send('Student added');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
 });
 
-router.put('/:id', async (req, res) => {
-  const { name, email } = req.body;
-  const { id } = req.params;
-  await studentModel.updateStudent(id, name, email);
-  res.sendStatus(200);
-});
-
+// DELETE a student
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  await studentModel.deleteStudent(id);
-  res.sendStatus(204);
+  try {
+    await pool.query('DELETE FROM students WHERE id = $1', [id]);
+    res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
 });
 
 module.exports = router;
