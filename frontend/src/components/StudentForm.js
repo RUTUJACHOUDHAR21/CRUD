@@ -13,8 +13,18 @@ const StudentForm = ({ onAdd }) => {
 
   return (
     <form onSubmit={submitHandler}>
-      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" required />
-      <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Name"
+        required
+      />
+      <input
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+        required
+      />
       <button type="submit">Add Student</button>
     </form>
   );
