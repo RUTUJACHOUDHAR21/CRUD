@@ -5,7 +5,7 @@ const pool = new Pool({
   host: 'dpg-d00c5u2li9vc739oksb0-a',
   database: 'crud_qguw',
   password: 'kvbHaChQR1aF91d1WlgelL6YIHx4aqwZ',
-  port: 5432, // default PostgreSQL port
+  port: 5432,
 });
 
 module.exports = pool;
