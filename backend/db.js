@@ -1,13 +1,11 @@
-// Load environment variables (only needed for local dev)
-require('dotenv').config();
 const { Pool } = require('pg');
 
-// Create connection pool using DATABASE_URL from Render or .env
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://rutuja:kvbHaChQR1aF91d1WlgelL6YIHx4aqwZ@dpg-d00c5u2li9vc739oksb0-a/crud_qguw',
-  ssl: {
-    rejectUnauthorized: false, // Important for Render
-  }
+  user: 'rutuja',
+  host: 'dpg-d00c5u2li9vc739oksb0-a',
+  database: 'crud_qguw',
+  password: 'kvbHaChQR1aF91d1WlgelL6YIHx4aqwZ',
+  port: 5432, // default PostgreSQL port
 });
 
 module.exports = pool;
